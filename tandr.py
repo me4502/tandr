@@ -29,7 +29,7 @@ def rate():
 
 @app.route("/login")
 def login():
-    return tanda_login.authorize(callback=url_for('oauth_authorized',
+    return tanda_login.authorize(callback=url_for("https://aqueous-anchroage-15078.herokuapp.com/login/callback",
         next=request.args.get('next') or request.referrer or None))
 
 @app.route("/login/callback")
