@@ -1,3 +1,4 @@
+import random 
 from flask import Flask, render_template, url_for, request, redirect, session
 from flask_oauthlib.client import OAuth
 app = Flask(__name__)
@@ -16,7 +17,7 @@ tanda_login = oauth.remote_app('tanda',
         access_token_url=tanda_url.format("api/oauth/token"),
         access_token_method='POST',
         authorize_url=tanda_url.format("api/oauth/authorize"),
-        request_token_params={'scope':'me'},
+        request_token_params={'scope':'me user'},
         consumer_key=oauth_key,
         consumer_secret=oauth_secret
         )
@@ -31,12 +32,14 @@ def rate():
 
 @app.route("/api/user")
 def give_pair():
-    return '[{name: "John", photo: "https://placekitten.com/512/513"},{name: "Gerald", photo: "https://placekitten.com/512/512"}]'
+    request = tanda_login.request('/api/v2/users').data
+    item1 = random.choice(request)
+    item2 = random.choice(request)
+    return "[{},{}]".format(item1, item2)
 
 @app.route("/api/result", methods=["POST"])
 def result_handler():
-    print(request.data)
-    return "OK"
+    return ""
 
 
 @app.route("/login")
@@ -45,7 +48,7 @@ def login():
             #callback="https://aqueous-anchorage-15078.herokuapp.com/login/callback",
             callback=url_for('oauth_authorized',_external=True),
             state={ 'next': request.args.get('next') or request.referrer or None }
-            )
+        )
 
 @app.route("/login/callback")
 def oauth_authorized():
