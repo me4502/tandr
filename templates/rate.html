@@ -67,7 +67,9 @@
 
             $.post("/api/rate", {up: userData.id, down: otherData.id}, function (result) {
                 console.log(result);
-            })
+            });
+
+            grabUsers();
         }
 
         function resetDevil() {
