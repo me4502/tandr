@@ -1,0 +1,12 @@
+{% extends "layout.html" %}
+{% set active_page = "rate" %}
+
+{% block title %}Tandr - Rate{% endblock %}
+
+{% block body %}
+    <ul>
+    {% for user in session.sorted_everyone %}
+        <li>{{ user.name }}</li>
+    {% endfor %}
+    </ul>
+{% endblock %}
