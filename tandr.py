@@ -30,29 +30,34 @@ def index():
 @app.route("/rate")
 def rate():
     data = request.form
-    if session.get("sorted_everyone"):
+    if session.get("has_sorted_everyone"):
         return render_template("priorities.html")
 
     if not session.get("unsorted_list"):
-        session['unsorted_list'] = tanda_login.request('/api/v2/users')
+        session['unsorted_list'] = tanda_login.request('/api/v2/users').data
 
-    if not session.get("comparisonsMade")
+    if not session.get("comparisonsMade"):
         session['comparisonsMade'] = [""]
 
     return render_template("rate.html")
 
 @app.route("/api/rate", methods=["POST"])
 def rate_api():
+    data = request.form
+    print(data)
     # Append the unique set
     session['comparisonsMade'].append(set([data['up'], data['down']]))
     #Insert the 
     if data['upIsFirst']:
         session['sorted_everyone'].insert(
-            session['sorted_everyone'].index(tanda_login.request('/api/v2/users/{}/'.format(data['up']))),
+            session['sorted_everyone'].index(tanda_login.request('/api/v2/users/{}/'.format(data['down']).data)),
                 session['unsorted_list'].pop()
         )
     elif data['down'] == session['sorted_everyone'][-1]['id']:
         session['sorted_everyone'].append(session['unsorted_list'].pop())
+
+    if len(session['unsorted_list']) == 0:
+        session['has_sorted_everyone'] = True
     return "OK"
 
 @app.route("/api/burn", methods=["POST"])
@@ -62,29 +67,35 @@ def burn_handler():
     data = request.form
     if not session.get("sorted_everyone"):
         session['sorted_everyone'] = [tanda_login.request('api/v2/users/{}/'.
-                                      format(data['id']).data]
+                                      format(data['id'])).data]
     else:
-        session['sorted_everyone'].append(tanda_login.request('api/v2/users/{}/'.format(data['id']).data)
+        session['sorted_everyone'].append(tanda_login.request('api/v2/users/{}/'.format(data['id']).data))
     return "OK"
 
 
 @app.route("/api/user")
 def give_pair():
-    if session.get("sorted_everyone"):
+    if session.get("has_sorted_everyone"):
         return json.dumps(None)
 
     if not session.get("unsorted_list"):
-        session['unsorted_list'] = tanda_login.request('/api/v2/users')
-    
-    for i in range(len(session.get('unsorted_list'))):
-        possibleComparison = (session.get('unsorted_list')[-1], session.get('sorted_everyone')[i])
-        if (set(possibleComparison) not in session.get('comparisonsMade')):
-            comparison = possibleComparison
-    return "[{},{}]".format(json.dumps(comparison[0]), json.dumps(comparison[1]))
+        session['unsorted_list'] = tanda_login.request('/api/v2/users').data
 
-@app.route("/api/result", methods=["POST"])
-def result_handler():
-    return ""
+    if not session.get("sorted_everyone"):
+        session['sorted_everyone'] = [session['unsorted_list'].pop()]
+    
+    for i in range(len(session.get('sorted_everyone'))):
+        possibleComparison = (session.get('unsorted_list')[-1]['id'], session.get('sorted_everyone')[i]['id'])
+        if (set(possibleComparison) not in session.get('comparisonsMade')):
+            employee1 = {}
+            employee2 = {}
+            for user in session.get('unsorted_list'):
+                if user['id'] == possibleComparison[0]:
+                    employee1 = user
+            for user in session.get('sorted_everyone'):
+                if user['id'] == possibleComparison[1]:
+                    employee2 = user
+    return "[{},{}]".format(json.dumps(employee1), json.dumps(employee2))
 
 @app.route("/login")
 def login():
