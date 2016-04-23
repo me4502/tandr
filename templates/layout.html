@@ -9,12 +9,18 @@
 </head>
 <body>
 
+{% set logged_in_username = logged_in_username|default('Login') -%}
+
 {% set navigation_bar = [
-    ('/login', 'login', 'Login'),
+    ('/login', 'login', logged_in_username),
     ('/', 'index', 'Home'),
     ('/rate', 'rate', 'Rate'),
 ] -%}
 {% set active_page = active_page|default('index') -%}
+
+{% if logged_in_username != 'Login' %}
+    navigation_bat[0][0] = '';
+{% endif %}
 
 <nav>
     <div class="nav-wrapper light-blue">
