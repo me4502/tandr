@@ -6,13 +6,17 @@
 {% block body %}
     <div class="row">
         <div class="col s6">
-            <div id="user-1">
+            <div class="card">
+                <div id="user-1" class="card-image">
 
+                </div>
             </div>
         </div>
         <div class="col s6">
-            <div id="user-2">
+            <div class="card">
+                <div id="user-2" class="card-image">
 
+                </div>
             </div>
         </div>
     </div>
@@ -40,9 +44,9 @@
 
             $.get("/api/user", function(data, status){
                 var rawJsonArray = JSON.parse(data);
-                user1.html("<img src='" + rawJsonArray[0].photo + "'><br><p class='center'>" + rawJsonArray[0].name + "</p>");
+                user1.html("<img src='" + rawJsonArray[0].photo + "'><br><span class='card-title center'>" + rawJsonArray[0].name + "</p>");
 
-                user2.html("<img src='" + rawJsonArray[1].photo + "'><br><p class='center'>" + rawJsonArray[1].name + "</p>");
+                user2.html("<img src='" + rawJsonArray[1].photo + "'><br><span class='card-title center'>" + rawJsonArray[1].name + "</p>");
             });
         }
 
