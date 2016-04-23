@@ -4,26 +4,28 @@
 {% block title %}Tandr - Rate{% endblock %}
 
 {% block body %}
-    <div class="row">
-        <div class="col s6">
-            <div class="card">
-                <div id="user-1" class="card-image" onclick="rateUser(1)">
+    <div id="vote-region">
+        <div class="row">
+            <div class="col s6">
+                <div class="card">
+                    <div id="user-1" class="card-image waves-effect waves-green" onclick="rateUser(1)">
 
+                    </div>
+                </div>
+            </div>
+            <div class="col s6">
+                <div class="card">
+                    <div id="user-2" class="card-image waves-effect waves-green" onclick="rateUser(2)">
+
+                    </div>
                 </div>
             </div>
         </div>
-        <div class="col s6">
-            <div class="card">
-                <div id="user-2" class="card-image" onclick="rateUser(2)">
-
+        <div class="row">
+            <div class="col s4 offset-s4 center">
+                <div id="devil" class="ui-widget-content" onmouseup="onMouseUpDevil(event)"  style="z-index: 1000000000;">
+                    <img src="/static/img/devil.png" width="35%" >
                 </div>
-            </div>
-        </div>
-    </div>
-    <div class="row">
-        <div class="col s4 offset-s4 center">
-            <div id="devil" class="ui-widget-content" onmouseup="onMouseUpDevil(event)">
-                <img src="/static/img/devil.png" width="35%">
             </div>
         </div>
     </div>
@@ -32,6 +34,7 @@
         var devil = $("#devil");
         var user1 = $("#user-1");
         var user2 = $("#user-2");
+        var voteRegion = $("#vote-region");
 
         var user1object, user2object;
 
@@ -41,20 +44,42 @@
 
         devil.draggable();
 
-        function grabUsers() {
+        function resetUsers() {
             resetDevil();
 
-            user1.html('');
-            user2.html('');
+            voteRegion.fadeOut("slow");
+            voteRegion.queue("fx", function() {
+                grabUsers(this);
 
+            });
+            voteRegion.fadeIn("slow");
+        }
+
+        function grabUsers(self) {
             $.get("/api/user", function(data, status){
                 var rawJsonArray = JSON.parse(data);
                 user1object = rawJsonArray[0];
                 user2object = rawJsonArray[1];
-                user1.html("<img src='" + user1object.photo + "'><br><span class='card-title center'><p class='shadow'>" + user1object.name + "</p></span>");
-
-                user2.html("<img src='" + user2object.photo + "'><br><span class='card-title center'><p class='shadow'>" + user2object.name + "</p></span>");
+                user1.html("<img id='user1img' src='" + user1object.photo + "'><br><span class='card-title center'><p class='shadow'>" + user1object.name + "</p></span>");
+                user2.html("<img id='user2img' src='" + user2object.photo + "'><br><span class='card-title center'><p class='shadow'>" + user2object.name + "</p></span>");
+                sizeImages();
+                if(self != null)
+                    $(self).dequeue("fx");
             });
+        }
+
+        function sizeImages() {
+            var imageWidth = window.innerWidth / 2.949;
+            var imageHeight = window.innerHeight / 2;
+
+            var user1img = $("#user1img");
+            var user2img = $("#user2img");
+
+            user1img.width(imageWidth);
+            user2img.width(imageWidth);
+
+            user1img.height(imageHeight);
+            user2img.height(imageHeight);
         }
 
         function rateUser(number) {
@@ -68,11 +93,13 @@
                 otherData = user1object;
             }
 
-            $.post("/api/rate", {up: userData.id, down: otherData.id}, function (result) {
+            var upIsFirst = (number == 1);
+
+            $.post("/api/rate", {up: userData.id, down: otherData.id, upIsFirst: upIsFirst}, function (result) {
                 console.log(result);
             });
 
-            grabUsers();
+            resetUsers();
         }
 
         function resetDevil() {
@@ -82,8 +109,10 @@
 
         function onMouseUpDevil(e) {
             if(user1.ispointover(e.x, e.y)) {
+                user1.animate({background: rgba(255,0,0,0)}, 1000);
                 burnUserData(user1object);
             } else if(user2.ispointover(e.x, e.y)) {
+                user2.animate({background: rgba(255,0,0,0)}, 1000);
                 burnUserData(user2object);
             }
         }
@@ -93,7 +122,7 @@
                 console.log(result);
             });
 
-            grabUsers();
+            resetUsers();
         }
     </script>
 {% endblock %}
