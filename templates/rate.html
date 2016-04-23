@@ -44,6 +44,9 @@
         function grabUsers() {
             resetDevil();
 
+            user1.html('');
+            user2.html('');
+
             $.get("/api/user", function(data, status){
                 var rawJsonArray = JSON.parse(data);
                 user1object = rawJsonArray[0];
