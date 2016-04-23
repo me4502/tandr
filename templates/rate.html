@@ -109,10 +109,8 @@
 
         function onMouseUpDevil(e) {
             if(user1.ispointover(e.x, e.y)) {
-                user1.animate({background: rgba(255,0,0,0)}, 1000);
                 burnUserData(user1object);
             } else if(user2.ispointover(e.x, e.y)) {
-                user2.animate({background: rgba(255,0,0,0)}, 1000);
                 burnUserData(user2object);
             }
         }
