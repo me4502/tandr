@@ -26,11 +26,11 @@
         <a href="#" data-activates="mobile-demo" class="button-collapse"><i class="material-icons">menu</i></a>
         <ul class="right">
             <li>
-                {% if username != 'Login' %}
+                {% if session.user %}
                     {% if profile_picture %}
-                        <img src="{{ profile_picture }}" width="32" height="32">
+                        <img src="{{ session.user.photo }}" width="32" height="32">
                     {% endif %}
-                    <a href="">{{ username }}</a>
+                    <a href="">{{ session.user.name }}</a>
                 {% else %}
                     <a href="/login">Login</a>
                 {% endif %}
