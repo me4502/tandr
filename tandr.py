@@ -1,4 +1,5 @@
 import random 
+import json
 from flask import Flask, render_template, url_for, request, redirect, session
 from flask_oauthlib.client import OAuth
 app = Flask(__name__)
@@ -35,7 +36,7 @@ def give_pair():
     request = tanda_login.request('/api/v2/users').data
     item1 = random.choice(request)
     item2 = random.choice(request)
-    return "[{},{}]".format(item1, item2)
+    return "[{},{}]".format(json.dumps(item1), json.dumps(item2))
 
 @app.route("/api/result", methods=["POST"])
 def result_handler():
