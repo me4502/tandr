@@ -4,5 +4,51 @@
 {% block title %}Tandr - Rate{% endblock %}
 
 {% block body %}
-  <p>Welcome. Welcome to City 17. You have chosen, or been chosen, to inhabit one of our finest remaining urban centres.</p>
+    <div class="row">
+        <div class="col s6">
+            <div id="user-1">
+
+            </div>
+        </div>
+        <div class="col s6">
+            <div id="user-2">
+
+            </div>
+        </div>
+    </div>
+    <div class="row">
+        <div class="col s4 offset-s4 center">
+            <div id="devil" class="ui-widget-content">
+                <img src="http://placekitten.com/150/150">
+            </div>
+        </div>
+    </div>
+
+    <script>
+        var devil = $("#devil");
+        var user1 = $("#user-1");
+        var user2 = $("#user-2");
+
+        $(document).ready(function() {
+            grabUsers();
+        });
+
+        devil.draggable();
+
+        function grabUsers() {
+            resetDevil();
+
+            $.get("/api/user", function(data, status){
+                var rawJsonArray = JSON.parse(data);
+                user1.html("<img src='" + rawJsonArray[0].photo + "'><br><p class='center'>" + rawJsonArray[0].name + "</p>");
+
+                user2.html("<img src='" + rawJsonArray[1].photo + "'><br><p class='center'>" + rawJsonArray[1].name + "</p>");
+            });
+        }
+
+        function resetDevil() {
+            devil.css("left", "0");
+            devil.css("top", "0");
+        }
+    </script>
 {% endblock %}
