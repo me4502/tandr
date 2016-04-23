@@ -9,6 +9,7 @@
     <link href="https://fonts.googleapis.com/icon?family=Material+Icons" rel="stylesheet">
     <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/2.2.3/jquery.min.js"></script>
     <script src="https://cdnjs.cloudflare.com/ajax/libs/jqueryui/1.11.4/jquery-ui.min.js"></script>
+    <script src="/static/js/jquery.ui.touch-punch.min.js"></script>
     <script src="https://cdnjs.cloudflare.com/ajax/libs/materialize/0.97.6/js/materialize.min.js"></script>
 </head>
 <body>
@@ -29,7 +30,7 @@
                     {% if session.user.photo %}
                         <img src="{{ session.user.photo }}" width="32" height="32">
                     {% endif %}
-                    <a href="">{{ session.user.name }}</a>
+                    <a href="/logout">{{ session.user.name }}</a>
                 {% else %}
                     <a href="/login">Login</a>
                 {% endif %}
