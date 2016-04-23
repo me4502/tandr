@@ -45,12 +45,10 @@ def oauth_authorized():
     if resp is None:
         flash(u'Invalid login')
         return redirect(next_url)
-    print(resp)
     session['tanda_token'] = (resp['access_token'], '')
-    x = tanda_login.request('api/v2/users/me')
-    print(x.data)
-    print(x.status)
-    return "ayylmao"
+    session['user'] = tanda_login.request('api/v2/users/me').data
+    # {'name': 'Declan Kelly', 'id': 125995, 'photo': None, 'utc_offset': 36000, 'time_zone': 'Australia/Brisbane'}
+    return redirect(next_url)
 
 @tanda_login.tokengetter
 def get_tanda_token(token=None):
