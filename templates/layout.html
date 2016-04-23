@@ -20,10 +20,6 @@
 ] -%}
 {% set active_page = active_page|default('index') -%}
 
-{% if username != 'Login' %}
-    navigation_bar[0][0] = '';
-{% endif %}
-
 <nav>
     <div class="nav-wrapper light-blue">
         <a href="/" class="brand-logo center">Tandr</a>
@@ -32,8 +28,6 @@
             <li>
                 {% if username != 'Login' %}
                     <img src="{{ profile_picture }}" width="32" height="32">
-                {% endif %}
-                {% if username != 'Login' %}
                     <a href="">{{ username }}</a>
                 {% else %}
                     <a href="/login">Login</a>
