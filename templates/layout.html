@@ -27,7 +27,9 @@
         <ul class="right">
             <li>
                 {% if username != 'Login' %}
-                    <img src="{{ profile_picture }}" width="32" height="32">
+                    {% if profile_picture %}
+                        <img src="{{ profile_picture }}" width="32" height="32">
+                    {% endif %}
                     <a href="">{{ username }}</a>
                 {% else %}
                     <a href="/login">Login</a>
@@ -65,7 +67,7 @@
     <div class="container">
         <div class="row">
             <div class="col l6 s12">
-                <h5 class="white-text">Tandr</h5>
+                <h5 class="white-text">Tanda AND Review</h5>
                 <p class="grey-text text-lighten-4">Created as part of the Tanda Hackathon 2016.</p>
             </div>
             <div class="col l4 offset-l2 s12">
