@@ -3,7 +3,6 @@ from flask_oauthlib.client import OAuth
 app = Flask(__name__)
 
 app.secret_key = "Ayy lmao"
-app.config['SERVER_NAME'] = "tand.review"
 
 oauth_key="763519b5c8d1c478f44296c2b6c82dcb772dc4b0fbafa66b68d889cd41da4d71"
 oauth_secret="6ecb90487aaf53377f8a0e536c7a4a4ba3b142bb972d838b1034858bd5e670e5"
