@@ -29,19 +29,62 @@ def index():
 
 @app.route("/rate")
 def rate():
+    data = request.form
+    if session.get("sorted_everyone"):
+        return render_template("priorities.html")
+
+    if not session.get("unsorted_list"):
+        session['unsorted_list'] = tanda_login.request('/api/v2/users')
+
+    if not session.get("comparisonsMade")
+        session['comparisonsMade'] = [""]
+
     return render_template("rate.html")
+
+@app.route("/api/rate", methods=["POST"])
+def rate_api():
+    # Append the unique set
+    session['comparisonsMade'].append(set([data['up'], data['down']]))
+    #Insert the 
+    if data['upIsFirst']:
+        session['sorted_everyone'].insert(
+            session['sorted_everyone'].index(tanda_login.request('/api/v2/users/{}/'.format(data['up']))),
+                session['unsorted_list'].pop()
+        )
+    elif data['down'] == session['sorted_everyone'][-1]['id']:
+        session['sorted_everyone'].append(session['unsorted_list'].pop())
+    return "OK"
+
+@app.route("/api/burn", methods=["POST"])
+def burn_handler():
+    print(data)
+    print(session)
+    data = request.form
+    if not session.get("sorted_everyone"):
+        session['sorted_everyone'] = [tanda_login.request('api/v2/users/{}/'.
+                                      format(data['id']).data]
+    else:
+        session['sorted_everyone'].append(tanda_login.request('api/v2/users/{}/'.format(data['id']).data)
+    return "OK"
+
 
 @app.route("/api/user")
 def give_pair():
-    request = tanda_login.request('/api/v2/users').data
-    item1 = random.choice(request)
-    item2 = random.choice(request)
-    return "[{},{}]".format(json.dumps(item1), json.dumps(item2))
+    if session.get("sorted_everyone"):
+        return json.dumps(None)
+
+    if not session.get("unsorted_list"):
+        session['unsorted_list'] = tanda_login.request('/api/v2/users')
+    
+    for i in range(len(session.get('unsorted_list'))):
+        possibleComparison = (session.get('unsorted_list')[-1], session.get('sorted_everyone')[i])
+        if (set(possibleComparison) not in session.get('comparisonsMade')):
+            comparison = possibleComparison
+    return "[{},{}]".format(json.dumps(comparison[0]), json.dumps(comparison[1]))
 
 @app.route("/api/result", methods=["POST"])
 def result_handler():
     return ""
-
 
 @app.route("/login")
 def login():
