@@ -7,14 +7,14 @@
     <div class="row">
         <div class="col s6">
             <div class="card">
-                <div id="user-1" class="card-image">
+                <div id="user-1" class="card-image" onclick="rateUser(1)">
 
                 </div>
             </div>
         </div>
         <div class="col s6">
             <div class="card">
-                <div id="user-2" class="card-image">
+                <div id="user-2" class="card-image" onclick="rateUser(2)">
 
                 </div>
             </div>
@@ -22,7 +22,7 @@
     </div>
     <div class="row">
         <div class="col s4 offset-s4 center">
-            <div id="devil" class="ui-widget-content">
+            <div id="devil" class="ui-widget-content" onmouseup="onMouseUpDevil(event)">
                 <img src="http://placekitten.com/150/150">
             </div>
         </div>
@@ -32,6 +32,8 @@
         var devil = $("#devil");
         var user1 = $("#user-1");
         var user2 = $("#user-2");
+
+        var user1object, user2object;
 
         $(document).ready(function() {
             grabUsers();
@@ -44,15 +46,49 @@
 
             $.get("/api/user", function(data, status){
                 var rawJsonArray = JSON.parse(data);
-                user1.html("<img src='" + rawJsonArray[0].photo + "'><br><span class='card-title center'><p class='shadow'>" + rawJsonArray[0].name + "</p></span>");
+                user1object = rawJsonArray[0];
+                user2object = rawJsonArray[1];
+                user1.html("<img src='" + user1object.photo + "'><br><span class='card-title center'><p class='shadow'>" + user1object.name + "</p></span>");
 
-                user2.html("<img src='" + rawJsonArray[1].photo + "'><br><span class='card-title center'><p class='shadow'>" + rawJsonArray[1].name + "</p></span>");
+                user2.html("<img src='" + user2object.photo + "'><br><span class='card-title center'><p class='shadow'>" + user2object.name + "</p></span>");
             });
+        }
+
+        function rateUser(number) {
+            var userData;
+            var otherData;
+            if(number == 1) {
+                userData = user1object;
+                otherData = user2object;
+            } else {
+                userData = user2object;
+                otherData = user1object;
+            }
+
+            $.post("/api/rate", {up: userData.id, down: otherData.id}, function (result) {
+                console.log(result);
+            })
         }
 
         function resetDevil() {
             devil.css("left", "0");
             devil.css("top", "0");
+        }
+
+        function onMouseUpDevil(e) {
+            if(user1.ispointover(e.x, e.y)) {
+                burnUserData(user1object);
+            } else if(user2.ispointover(e.x, e.y)) {
+                burnUserData(user2object);
+            }
+        }
+
+        function burnUserData(data) {
+            $.post("/api/burn", {id: data.id}, function(result) {
+                console.log(result);
+            });
+
+            grabUsers();
         }
     </script>
 {% endblock %}
