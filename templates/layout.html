@@ -3,26 +3,67 @@
 <head>
     <meta charset="UTF-8">
     <title>{% block title %}{%  endblock %}</title>
-
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/materialize/0.97.6/css/materialize.min.css">
     <link rel="stylesheet" href="/static/css/main.css">
     <script src="https://cdnjs.cloudflare.com/ajax/libs/materialize/0.97.6/js/materialize.min.js"></script>
 </head>
 <body>
+
+{% set navigation_bar = [
+    ('/login', 'login', 'Login'),
+    ('/', 'index', 'Home'),
+    ('/rate', 'rate', 'Rate'),
+] -%}
+{% set active_page = active_page|default('index') -%}
+
 <nav>
-    <div class="nav-wrapper">
-      <a href="#" class="brand-logo center">Logo</a>
+    <div class="nav-wrapper light-blue">
+      <a href="/" class="brand-logo center">Tandr</a>
       <ul id="nav-mobile" class="left hide-on-med-and-down">
-        <li><a href="login.html">Login</a></li>
-        <li><a href="index.html">Home</a></li>
-        <li><a href="rate.html">Rate</a></li>
+        {% for href, id, caption in navigation_bar %}
+          <li{% if id == active_page %} class="active"{% endif %}>
+              <a href="{{ href|e }}">{{ caption|e }}</a>
+          </li>
+        {% endfor %}
       </ul>
     </div>
 </nav>
-{% block body %}
 
-<b>Template file!</b>
+<main>
+    <div class="container">
+    {% block body %}
 
-{% endblock %}
+    <b>Template file!</b>
+
+    {% endblock %}
+    </div>
+</main>
+
+<footer class="page-footer light-blue">
+    <div class="container">
+        <div class="row">
+            <div class="col l6 s12">
+                <h5 class="white-text">Tandr</h5>
+                <p class="grey-text text-lighten-4">Created as part of the Tanda Hackathon 2016.</p>
+            </div>
+            <div class="col l4 offset-l2 s12">
+                <h5 class="white-text">People</h5>
+                <ul>
+                  <li><a class="grey-text text-lighten-3" href="//melody.blue">Mel</a></li>
+                  <li><a class="grey-text text-lighten-3" href="//www.butts.com">Caro</a></li>
+                  <li><a class="grey-text text-lighten-3" href="//www.me4502.com">Madeline Miller (Me4502)</a></li>
+                  <li><a class="grey-text text-lighten-3" href="//www.fbi.gov/wanted/vicap/missing-persons">Missing Person 1</a></li>
+                  <li><a class="grey-text text-lighten-3" href="//www.fbi.gov/wanted/vicap/missing-persons">Missing Person 2</a></li>
+                </ul>
+            </div>
+        </div>
+    </div>
+    <div class="footer-copyright">
+        <div class="container">
+            © 2016 Best Team
+            <a class="grey-text text-lighten-4 right" href="https://www.github.com/me4502/tandr">Source Code</a>
+        </div>
+    </div>
+</footer>
 </body>
 </html>
