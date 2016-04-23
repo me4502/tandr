@@ -19,7 +19,7 @@
 <nav>
     <div class="nav-wrapper light-blue">
       <a href="/" class="brand-logo center">Tandr</a>
-      <ul id="nav-mobile" class="left hide-on-med-and-down">
+      <ul id="nav-mobile" class="right hide-on-med-and-down">
         {% for href, id, caption in navigation_bar %}
           <li{% if id == active_page %} class="active"{% endif %}>
               <a href="{{ href|e }}">{{ caption|e }}</a>
@@ -52,8 +52,8 @@
                   <li><a class="grey-text text-lighten-3" href="//melody.blue">Mel</a></li>
                   <li><a class="grey-text text-lighten-3" href="//www.butts.com">Caro</a></li>
                   <li><a class="grey-text text-lighten-3" href="//www.me4502.com">Madeline Miller (Me4502)</a></li>
+                  <li><a class="grey-text text-lighten-3" href="//www.github.com/jeremypearson">Jeremy Pearson</a></li>
                   <li><a class="grey-text text-lighten-3" href="//www.fbi.gov/wanted/vicap/missing-persons">Missing Person 1</a></li>
-                  <li><a class="grey-text text-lighten-3" href="//www.fbi.gov/wanted/vicap/missing-persons">Missing Person 2</a></li>
                 </ul>
             </div>
         </div>
