@@ -29,6 +29,10 @@ def index():
 def rate():
     return render_template("rate.html")
 
+@app.route("/api/user")
+def give_pair():
+    return '[{name: "John", photo: "https://placekitten.com/512/513},{name: "Gerald", photo: "https://placekitten.com/512/512}]'
+
 @app.route("/login")
 def login():
     return tanda_login.authorize(
@@ -47,7 +51,6 @@ def oauth_authorized():
         return redirect(next_url)
     session['tanda_token'] = (resp['access_token'], '')
     session['user'] = tanda_login.request('api/v2/users/me').data
-    # {'name': 'Declan Kelly', 'id': 125995, 'photo': None, 'utc_offset': 36000, 'time_zone': 'Australia/Brisbane'}
     return redirect(next_url)
 
 @tanda_login.tokengetter
