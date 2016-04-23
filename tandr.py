@@ -31,7 +31,7 @@ def rate():
 
 @app.route("/api/user")
 def give_pair():
-    return '[{name: "John", photo: "https://placekitten.com/512/513},{name: "Gerald", photo: "https://placekitten.com/512/512}]'
+    return '[{name: "John", photo: "https://placekitten.com/512/513},{name: "Gerald", photo: "https://placekitten.com/512/512"}]'
 
 @app.route("/login")
 def login():
